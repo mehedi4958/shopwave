@@ -54,11 +54,23 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
+  Future<void> logout() async {
+    await _clearSession();
+    state = const AuthStateInitial();
+  }
+
   Future<void> _saveSession(User user) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(AppConstants.authTokenKey, user.token);
     await prefs.setString(AppConstants.userIdKey, user.id);
     await prefs.setString('user_data', jsonEncode(user.toJson()));
+  }
+
+  Future<void> _clearSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(AppConstants.authTokenKey);
+    await prefs.remove(AppConstants.userIdKey);
+    await prefs.remove('user_data');
   }
 
   String _httpErrorMessage(int? code) => switch (code) {
