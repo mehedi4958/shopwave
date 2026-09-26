@@ -1,3 +1,5 @@
+import 'package:shopwave/models/user.dart';
+
 sealed class AuthState {
   const AuthState();
 }
