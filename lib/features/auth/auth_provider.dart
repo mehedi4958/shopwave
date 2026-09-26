@@ -42,6 +42,7 @@ class AuthNotifier extends Notifier<AuthState> {
         data: {'email': email, 'password': password},
       );
       final user = User.fromJson(response.data['user'] as Map<String, dynamic>);
+      await _saveSession(user);
       state = AuthStateAuthenticated(user);
     } on DioException catch (e) {
       final message =
@@ -85,3 +86,7 @@ class AuthNotifier extends Notifier<AuthState> {
     _ => 'Unknown Error. Please try again.',
   };
 }
+
+final authProvider = NotifierProvider<AuthNotifier, AuthState>(
+  AuthNotifier.new,
+);
